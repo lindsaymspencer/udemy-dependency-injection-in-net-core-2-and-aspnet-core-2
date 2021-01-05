@@ -7,12 +7,20 @@ namespace UdemyDependencyInjection
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            IDataAccess dal = new DataAccess();
+            IBusiness biz = new BusinessConstructorInjected(dal);
+            var userInterface = new UserInterface(biz);
+            userInterface.GetData();
         }
     }
 
     public class UserInterface
     {
+        private readonly IBusiness _business;
+        public UserInterface(IBusiness business)
+        {
+            _business = business;
+        }
         public void GetData()
         {
             Console.WriteLine("Enter your username:");
@@ -21,9 +29,7 @@ namespace UdemyDependencyInjection
             Console.WriteLine("Enter your password:");
             var password = Console.ReadLine();
 
-            // IBusiness business = new Business();
-            IBusiness business = new BusinessV2();
-            business.SignUp(userName, password);
+            _business.SignUp(userName, password);
         }
     }
 
@@ -32,7 +38,7 @@ namespace UdemyDependencyInjection
         void SignUp(string userName, string password);
     }
 
-    public class Business : IBusiness
+    public class BusinessCoupled : IBusiness
     {
         public void SignUp(string userName, string password)
         {
@@ -42,13 +48,17 @@ namespace UdemyDependencyInjection
         }
     }
 
-    public class BusinessV2 : IBusiness
+    public class BusinessConstructorInjected : IBusiness
     {
+        private readonly IDataAccess _dataAccess;
+        public BusinessConstructorInjected(IDataAccess dataAccess)
+        {
+            _dataAccess = dataAccess;
+        }
         public void SignUp(string userName, string password)
         {
             // validation
-            IDataAccess dataAccess = new DataAccess();
-            dataAccess.Store(userName, password);
+            _dataAccess.Store(userName, password);
         }
     }
     public interface IDataAccess
