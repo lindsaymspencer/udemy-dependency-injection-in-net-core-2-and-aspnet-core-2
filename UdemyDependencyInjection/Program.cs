@@ -21,22 +21,42 @@ namespace UdemyDependencyInjection
             Console.WriteLine("Enter your password:");
             var password = Console.ReadLine();
 
-            var business = new Business();
+            // IBusiness business = new Business();
+            IBusiness business = new BusinessV2();
             business.SignUp(userName, password);
         }
     }
 
-    public class Business
+    public interface IBusiness
+    {
+        void SignUp(string userName, string password);
+    }
+
+    public class Business : IBusiness
     {
         public void SignUp(string userName, string password)
         {
             // validation
-            var dataAccess = new DataAccess();
+            IDataAccess dataAccess = new DataAccess();
             dataAccess.Store(userName, password);
         }
     }
 
-    public class DataAccess
+    public class BusinessV2 : IBusiness
+    {
+        public void SignUp(string userName, string password)
+        {
+            // validation
+            IDataAccess dataAccess = new DataAccess();
+            dataAccess.Store(userName, password);
+        }
+    }
+    public interface IDataAccess
+    {
+        void Store(string userName, string password);
+    }
+
+    public class DataAccess : IDataAccess
     {
         public void Store(string userName, string password)
         {
