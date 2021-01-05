@@ -59,7 +59,6 @@ namespace UdemyDependencyInjection
         private readonly IDataAccess _dataAccess;
         public BusinessConstructorInjected(IDataAccess dataAccess)
         {
-            
             _dataAccess = dataAccess;
         }
         public void SignUp(string userName, string password)
