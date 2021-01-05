@@ -1,26 +1,47 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PersonalBlog.Models;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
+using PersonalBlog.Interfaces;
 
 namespace PersonalBlog.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IDataService _dataService;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IDataService dataService, ILogger<HomeController> logger)
         {
+            _dataService = dataService;
             _logger = logger;
         }
 
         public IActionResult Index()
         {
-            return View();
+            List<Post> model = _dataService.GetAll().Result;
+            return View(model);
+        }
+
+        [Route("Post")]
+        [HttpGet]
+        public async Task<IActionResult> CreatePost(Post model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("Validation", "Please provide all values.");
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post(Post model)
+        {
+            await _dataService.Create(model);
+            return RedirectToAction("Index");
         }
 
         public IActionResult Privacy()

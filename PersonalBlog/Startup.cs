@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
+using PersonalBlog.Interfaces;
+using PersonalBlog.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace PersonalBlog
 {
@@ -25,12 +25,18 @@ namespace PersonalBlog
         {
             services.AddControllersWithViews();
 
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IAuthorizer, IpBasedAuthorizer>();
+
             ConfigureDataService(services);
         }
 
         private void ConfigureDataService(IServiceCollection services)
         {
-            services.AddSingleton<IDynamoDBContext, DynamoDBContext>();
+            var client = new AmazonDynamoDBClient();
+            var context = new DynamoDBContext(client);
+            services.AddSingleton<IDynamoDBContext>(context);
+            services.AddScoped<IDataService, DynanmoDbDataService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2.DataModel;
 using PersonalBlog.Interfaces;
@@ -21,9 +19,9 @@ namespace PersonalBlog.Services
             await _context.SaveAsync<Post>(model);
         }
 
-        public Task<List<Post>> GetAll()
+        public async Task<List<Post>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _context.ScanAsync<Post>(new List<ScanCondition>()).GetRemainingAsync();
         }
     }
 }
