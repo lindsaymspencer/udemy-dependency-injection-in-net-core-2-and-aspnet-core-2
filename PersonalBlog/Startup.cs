@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Amazon.DynamoDBv2.DataModel;
 
 namespace PersonalBlog
 {
@@ -23,6 +24,13 @@ namespace PersonalBlog
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            ConfigureDataService(services);
+        }
+
+        private void ConfigureDataService(IServiceCollection services)
+        {
+            services.AddSingleton<IDynamoDBContext, DynamoDBContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
