@@ -33,6 +33,7 @@ namespace PersonalBlog
 
         private void ConfigureDataService(IServiceCollection services)
         {
+            // Set up AWS https://docs.aws.amazon.com/cli/latest/userguide/welcome-examples.html
             var client = new AmazonDynamoDBClient();
             var context = new DynamoDBContext(client);
             services.AddSingleton<IDynamoDBContext>(context);
