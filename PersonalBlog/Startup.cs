@@ -8,6 +8,7 @@ using Amazon.DynamoDBv2.DataModel;
 using PersonalBlog.Interfaces;
 using PersonalBlog.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace PersonalBlog
 {
@@ -28,6 +29,7 @@ namespace PersonalBlog
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IAuthorizer, IpBasedAuthorizer>();
             services.AddScoped<ProtectorAttribute>();
+            services.AddLogging(c => c.AddConsole());
 
             ConfigureDataService(services);
         }

@@ -22,6 +22,7 @@ namespace PersonalBlog.Controllers
 
         public IActionResult Index()
         {
+            _logger.Log(LogLevel.Information, "In the Index method . . .");
             List<Post> model = _dataService.GetAll().Result;
             return View(model);
         }
