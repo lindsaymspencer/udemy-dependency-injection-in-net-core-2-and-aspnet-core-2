@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using PersonalBlog.Interfaces;
+using PersonalBlog.Services;
 
 namespace PersonalBlog.Controllers
 {
@@ -27,6 +28,7 @@ namespace PersonalBlog.Controllers
 
         [Route("Post")]
         [HttpGet]
+        [ServiceFilter(typeof(ProtectorAttribute))]
         public async Task<IActionResult> CreatePost(Post model)
         {
             if (!ModelState.IsValid)
@@ -38,6 +40,7 @@ namespace PersonalBlog.Controllers
         }
 
         [HttpPost]
+        [ServiceFilter(typeof(ProtectorAttribute))]
         public async Task<IActionResult> Post(Post model)
         {
             await _dataService.Create(model);

@@ -27,6 +27,7 @@ namespace PersonalBlog
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IAuthorizer, IpBasedAuthorizer>();
+            services.AddScoped<ProtectorAttribute>();
 
             ConfigureDataService(services);
         }
